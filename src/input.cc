@@ -11,7 +11,9 @@ char YTUI::Input::GetByte() {
 	info.c_cc[VTIME]  =  0;       // no timeout
 	tcsetattr(0, TCSANOW, &info); // set immediately
 	
-	read(STDIN_FILENO, &ret, 1);
+	if (read(STDIN_FILENO, &ret, 1) == -1) {
+		throw std::runtime_error(strerror(errno));
+	}
 	
 	return ret;
 }
