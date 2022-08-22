@@ -59,24 +59,31 @@ void YTUI::Terminal::SetEffectAttribute(const YTUI::EffectAttribute& effect, boo
 		}
 		case YTUI::EffectAttribute::Dim: {
 			printf("\x1b[%im", on? 2 : 22);
+			break;
 		}
 		case YTUI::EffectAttribute::Italic: {
 			printf("\x1b[%im", on? 3 : 23);
+			break;
 		}
 		case YTUI::EffectAttribute::Underline: {
 			printf("\x1b[%im", on? 4 : 24);
+			break;
 		}
 		case YTUI::EffectAttribute::Blinking: {
 			printf("\x1b[%im", on? 5 : 25);
+			break;
 		}
 		case YTUI::EffectAttribute::Reverse: {
 			printf("\x1b[%im", on? 7 : 27);
+			break;
 		}
 		case YTUI::EffectAttribute::Hidden: {
 			printf("\x1b[%im", on? 8 : 28);
+			break;
 		}
 		case YTUI::EffectAttribute::Strikethrough: {
 			printf("\x1b[%im", on? 9 : 29);
+			break;
 		}
 	}
 }
