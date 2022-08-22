@@ -2,34 +2,29 @@
 
 int main(void) {
 	YTUI::Screen scr;
-	YTUI::Vec2   playerPos = {5, 5};
 
 	while (true) {
-		YTUI::Key input = YTUI::Input::GetKey();
+		YTUI::Key key = YTUI::Input::GetKey();
 
-		switch (input) {
+		switch (key) {
 			case YTUI::Keys::Up: {
-				-- playerPos.y;
+				scr.buf.Print("up\n");
 				break;
 			}
 			case YTUI::Keys::Down: {
-				++ playerPos.y;
+				scr.buf.Print("down\n");
 				break;
 			}
 			case YTUI::Keys::Left: {
-				-- playerPos.x;
+				scr.buf.Print("left\n");
 				break;
 			}
 			case YTUI::Keys::Right: {
-				++ playerPos.x;
+				scr.buf.Print("right\n");
 				break;
 			}
 		}
 
-		// render
-		scr.buf.Clear();
-		scr.buf.MoveCursor(playerPos);
-		scr.buf.PrintChar('#');
 		scr.Render();
 	}
 }
