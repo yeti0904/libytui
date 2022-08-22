@@ -1,4 +1,4 @@
-CC   = clang++
+CXX  = clang++
 src  = $(wildcard ./*.cc)
 prog = $(subst ./,bin/,$(basename $(src)))
 arg  = -g -Wall -pedantic -O3
@@ -8,7 +8,7 @@ all: $(prog)
 
 $(prog): bin/% : ./%.cc
 	mkdir -p bin
-	$(CC) $(arg) -o $@ $< $(lib)
+	$(CXX) $(arg) -o $@ $< $(lib)
 
 clean:
 	rm -r bin
