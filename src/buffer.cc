@@ -1,6 +1,46 @@
 #include "buffer.hh"
 #include "math.hh"
 
+bool YTUI::CharacterCompare(const Character& ch1, const Character& ch2) {
+	if (ch1.ch != ch2.ch) {
+		return false;
+	}
+	if (ch1.attr.colourMode != ch2.attr.colourMode) {
+		return false;
+	}
+	switch (ch1.attr.colourMode) {
+		case YTUI::ColourMode::Colour256:
+		case YTUI::ColourMode::Colour16: {
+			if (
+				(ch1.attr.colour.back.byte != ch2.attr.colour.back.byte) ||
+				(ch1.attr.colour.front.byte != ch2.attr.colour.front.byte)
+			) {
+				return false;
+			}
+			break;
+		}
+		case YTUI::ColourMode::Truecolour: {
+			if (
+				(ch1.attr.colour.back.rgb != ch2.attr.colour.back.rgb) ||
+				(ch1.attr.colour.front.rgb != ch2.attr.colour.front.rgb)
+			) {
+				return false;
+			}
+		}
+	}
+
+	return (
+		(ch1.attr.bold == ch2.attr.bold) &&
+		(ch1.attr.dim == ch2.attr.dim) &&
+		(ch1.attr.italic == ch2.attr.italic) &&
+		(ch1.attr.underline == ch2.attr.underline) &&
+		(ch1.attr.blinking == ch2.attr.blinking) &&
+		(ch1.attr.reverse == ch2.attr.reverse) &&
+		(ch1.attr.hidden == ch2.attr.hidden) &&
+		(ch1.attr.strikethrough == ch2.attr.strikethrough)
+	);
+}
+
 YTUI::Buffer::Buffer() {
 	cursor           = {0, 0};
 	options.wrapText = false;

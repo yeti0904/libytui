@@ -72,6 +72,8 @@ namespace YTUI {
 		{}
 	};
 
+	bool CharacterCompare(const Character& ch1, const Character& ch2);
+
 	struct BufferOptions {
 		bool wrapText;
 	};

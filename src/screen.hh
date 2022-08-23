@@ -7,7 +7,7 @@ namespace YTUI {
 	class Screen {
 		public:
 			// variables
-			YTUI::Buffer oldBuf;
+			YTUI::Buffer old;
 			YTUI::Buffer buf;
 
 			// functions

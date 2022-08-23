@@ -15,6 +15,17 @@ namespace YTUI {
 	};
 	struct RGBColour {
 		uint8_t r, g, b;
+
+		bool operator==(RGBColour value) const {
+			return (
+				(r == value.r) &&
+				(g == value.g) &&
+				(b == value.b)
+			);
+		}
+		bool operator!=(RGBColour value) const {
+			return (*this) == value;
+		}
 	};
 }
 

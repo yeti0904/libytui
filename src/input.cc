@@ -41,6 +41,20 @@ YTUI::Key YTUI::Input::GetKey() {
 			case 'D': {
 				return YTUI::Keys::Left;
 			}
+			case 'H': {
+				return YTUI::Keys::Home;
+			}
+			case 'F': {
+				return YTUI::Keys::End;
+			}
+			case '3': {
+				in = YTUI::Input::GetByte();
+				switch (in) {
+					case '~': {
+						return YTUI::Keys::Delete;
+					}
+				}
+			}
 		}
 	}
 	return in;

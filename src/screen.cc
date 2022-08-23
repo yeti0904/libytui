@@ -7,6 +7,7 @@ YTUI::Screen::Screen() {
 	YTUI::Terminal::SaveCursor();
 	YTUI::Terminal::Clear();
 	buf.Resize(YTUI::Terminal::GetSize());
+	old.Resize(buf.Size());
 
 	YTUI::SignalHandlers::Init();
 }
@@ -21,10 +22,20 @@ YTUI::Screen::~Screen() {
 
 void YTUI::Screen::Render() {
 	YTUI::Vec2 size = buf.Size();
+	old.Resize(buf.Size());
 	
 	for (size_t i = 0; i < size.y; ++i) {
-		YTUI::Terminal::MoveCursor({1, i + 1});
 		for (size_t j = 0; j < size.x; ++j) {
+			if (
+				YTUI::CharacterCompare(
+					buf.GetCharacter({j, i}), old.GetCharacter({j, i})
+				)
+			) {
+				continue;
+			}
+
+			YTUI::Terminal::MoveCursor({j + 1, i + 1});
+		
 			auto ch = buf.GetCharacter({j, i});
 
 			switch (ch.attr.colourMode) {
@@ -77,4 +88,7 @@ void YTUI::Screen::Render() {
 	fflush(stdout);
 
 	YTUI::Terminal::MoveCursor({buf.cursor.x + 1, buf.cursor.y + 1});
+
+	// blit current buffer to old buffer
+	old.BlitBuffer(buf, {0, 0});
 }
