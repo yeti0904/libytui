@@ -6,6 +6,7 @@ YTUI::Screen::Screen() {
 	YTUI::Terminal::UseAlternativeBuffer(true);
 	YTUI::Terminal::SaveCursor();
 	YTUI::Terminal::Clear();
+	YTUI::Terminal::SetEcho(false);
 	buf.Resize(YTUI::Terminal::GetSize());
 	old.Resize(buf.Size());
 
@@ -18,6 +19,7 @@ YTUI::Screen::~Screen() {
 	YTUI::Terminal::RestoreCursor();
 	YTUI::Terminal::SetCursorVisibility(true);
 	YTUI::Terminal::ResetAttributes();
+	YTUI::Terminal::SetEcho(true);
 }
 
 void YTUI::Screen::Render() {

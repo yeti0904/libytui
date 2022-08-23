@@ -10,7 +10,8 @@ int main(void) {
 	mywindow.Print("hello from this window");
 
 	scr.buf.BlitBuffer(mywindow, {3, 3});
+		// copies the contents of the window onto the main screen buffer at (3, 3)
 	scr.Render();
-	getchar();
+	YTUI::Input::GetByte(); // wait until key pressed
 	return 0;
 }

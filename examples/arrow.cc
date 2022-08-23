@@ -4,7 +4,7 @@ int main(void) {
 	YTUI::Screen scr;
 
 	while (true) {
-		YTUI::Key key = YTUI::Input::GetKey();
+		YTUI::Key key = YTUI::Input::GetKey(); // get user input
 
 		switch (key) {
 			case YTUI::Keys::Up: {

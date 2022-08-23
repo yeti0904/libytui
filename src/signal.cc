@@ -17,6 +17,10 @@ void YTUI::SignalHandlers::Init() {
 void YTUI::SignalHandlers::ControlC(int) {
 	YTUI::Terminal::Clear();
 	YTUI::Terminal::UseAlternativeBuffer(false);
+	YTUI::Terminal::RestoreCursor();
+	YTUI::Terminal::SetCursorVisibility(true);
+	YTUI::Terminal::ResetAttributes();
+	YTUI::Terminal::SetEcho(true);
 	exit(0);
 }
 

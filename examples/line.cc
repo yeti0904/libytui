@@ -6,6 +6,6 @@ int main(void) {
 	scr.buf.DrawLine({1, 1}, {8, 6}, '#');
 
 	scr.Render();
-	getchar();
+	YTUI::Input::GetByte(); // wait until key pressed
 	return 0;
 }

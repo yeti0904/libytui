@@ -4,6 +4,8 @@ int main(void) {
 	YTUI::Screen scr;
 	YTUI::Vec2   playerPos = {5, 5};
 
+	YTUI::Terminal::SetCursorVisibility(false); // disables cursor
+
 	while (true) {
 		YTUI::Key input = YTUI::Input::GetKey();
 

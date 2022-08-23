@@ -29,6 +29,7 @@ namespace YTUI {
 		void       RestoreCursor();
 		void       SetEffectAttribute(const YTUI::EffectAttribute& effect, bool on);
 		void       ResetAttributes();
+		void       SetEcho(bool on);
 	}
 }
 

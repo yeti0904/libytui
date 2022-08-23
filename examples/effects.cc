@@ -36,6 +36,6 @@ int main(void) {
 	scr.buf.ResetAttributes();
 
 	scr.Render();
-	getchar();
+	YTUI::Input::GetByte(); // wait until key pressed
 	return 0;
 }

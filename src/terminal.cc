@@ -91,3 +91,16 @@ void YTUI::Terminal::SetEffectAttribute(const YTUI::EffectAttribute& effect, boo
 void YTUI::Terminal::ResetAttributes() {
 	fputs("\x1b[0m", stdout);
 }
+
+void YTUI::Terminal::SetEcho(bool on) {
+	struct termios term;
+	tcgetattr(STDIN_FILENO, &term);
+
+	if (on) {
+		term.c_lflag |= ECHO;
+	}
+	else {
+		term.c_lflag &= ~ECHO;
+	}
+	tcsetattr(STDIN_FILENO, 0, &term);
+}
