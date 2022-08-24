@@ -20,8 +20,16 @@ char YTUI::Input::GetByte() {
 
 YTUI::Key YTUI::Input::GetKey() {
 	char in = YTUI::Input::GetByte();
-	if (in != '\x1b') {
-		return in;
+
+	switch (in) {
+		case '\x1b': break;
+		case 8:
+		case 127: {
+			return YTUI::Keys::Backspace;
+		}
+		default: {
+			return in;
+		}
 	}
 
 	in = YTUI::Input::GetByte();
@@ -47,6 +55,15 @@ YTUI::Key YTUI::Input::GetKey() {
 			case 'F': {
 				return YTUI::Keys::End;
 			}
+			case '2': {
+				in = YTUI::Input::GetByte();
+				switch (in) {
+					case '~': {
+						return YTUI::Keys::Insert;
+					}
+				}
+				break;
+			}
 			case '3': {
 				in = YTUI::Input::GetByte();
 				switch (in) {
@@ -54,6 +71,25 @@ YTUI::Key YTUI::Input::GetKey() {
 						return YTUI::Keys::Delete;
 					}
 				}
+				break;
+			}
+			case '5': {
+				in = YTUI::Input::GetByte();
+				switch (in) {
+					case '~': {
+						return YTUI::Keys::PageUp;
+					}
+				}
+				break;
+			}
+			case '6': {
+				in = YTUI::Input::GetByte();
+				switch (in) {
+					case '~': {
+						return YTUI::Keys::PageDown;
+					}
+				}
+				break;
 			}
 		}
 	}

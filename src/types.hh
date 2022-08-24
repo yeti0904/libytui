@@ -24,7 +24,11 @@ namespace YTUI {
 			);
 		}
 		bool operator!=(RGBColour value) const {
-			return (*this) == value;
+			return (
+				(r != value.r) ||
+				(g != value.g) ||
+				(b != value.b)
+			);
 		}
 	};
 }

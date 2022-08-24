@@ -79,6 +79,11 @@ void YTUI::Buffer::PrintChar(const char ch) {
 		case '\n': {
 			++ cursor.y;
 			cursor.x = 0;
+
+			if (options.autoScroll && (cursor.y >= buf.size())) {
+				ScrollDown(1);
+			}
+			
 			break;
 		}
 		default: {
@@ -185,11 +190,24 @@ void YTUI::Buffer::BlitBuffer(Buffer& buffer, const YTUI::Vec2& position) {
 	}
 }
 
-void YTUI::Buffer::DrawRect(const YTUI::Rect& rect, char material) {
+void YTUI::Buffer::DrawRect(const YTUI::Rect& rect, char material, bool fill) {
 	YTUI::Vec2 size = Size();
 
-	for (size_t i = rect.y; i < rect.h; ++i) {
-		for (size_t j = rect.w; j < rect.w; ++j) {
+	if (!fill) {
+		DrawLine({rect.x, rect.y}, {rect.x + rect.w - 1, rect.y}, material);
+		DrawLine({rect.x, rect.y}, {rect.x, rect.y + rect.h}, material);
+		DrawLine(
+			{rect.x + rect.w - 1, rect.y}, {rect.x + rect.w, rect.y + rect.h}, material
+		);
+		DrawLine(
+			{rect.x, rect.y + rect.h - 1}, {rect.x + rect.w, rect.y + rect.h - 1},
+			material
+		);
+		return;
+	}
+
+	for (size_t i = rect.y; i < rect.y + rect.h; ++i) {
+		for (size_t j = rect.x; j < rect.x + rect.w; ++j) {
 			if ((i < size.y) && (j < size.x)) {
 				buf[i][j] = YTUI::Character(material, attr);
 			}
@@ -258,4 +276,19 @@ void YTUI::Buffer::SetEffectAttribute(const YTUI::EffectAttribute& effect, bool 
 			break;
 		}
 	}
+}
+
+void YTUI::Buffer::ScrollDown(size_t lines) {
+	for (size_t i = 0; i < lines; ++i) {
+		buf.erase(buf.begin());
+
+		std::vector <YTUI::Character> newLine;
+		for (size_t j = 0; j < Size().x; ++j) {
+			newLine.push_back(YTUI::Character(' ', attr));
+		}
+
+		buf.push_back(newLine);
+	}
+
+	cursor.y -= lines;
 }

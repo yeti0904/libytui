@@ -76,6 +76,7 @@ namespace YTUI {
 
 	struct BufferOptions {
 		bool wrapText;
+		bool autoScroll;
 	};
 
 	class Buffer {
@@ -103,12 +104,13 @@ namespace YTUI {
 			void             MoveCursor(const YTUI::Vec2& pos);
 			void             DrawBorder();
 			void             BlitBuffer(Buffer& buffer, const YTUI::Vec2& position);
-			void             DrawRect(const YTUI::Rect& rect, char material);
+			void             DrawRect(const YTUI::Rect& rect, char material, bool fill);
 			void             DrawLine(
 				const YTUI::Vec2& start, const YTUI::Vec2& end, char material
 			);
 			void             ResetAttributes();
 			void             SetEffectAttribute(const EffectAttribute& effect, bool on);
+			void             ScrollDown(size_t lines);
 	};
 }
 

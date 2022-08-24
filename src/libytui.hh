@@ -10,5 +10,6 @@
 #include "colours.hh"
 #include "input.hh"
 #include "util.hh"
+#include "math.hh"
 
 #endif
