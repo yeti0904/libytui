@@ -6,7 +6,13 @@ OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 APP = ./bin/libytui.a
 
 # compiler related
+ifeq (${platform}, windows)
+CXX = x86_64-w64-mingw32-g++
+AR  = x86_64-w64-mingw32-ar
+else
 CXX = clang++
+AR  = ar
+endif
 CXXVER = c++17
 CXXFLAGS = \
 	-O3 \
@@ -19,9 +25,13 @@ CXXFLAGS = \
 
 CXXLIBS = 
 
+ifeq (${platform}, windows)
+	CXXFLAGS += -static -static-libgcc -static-libstdc++
+endif
+
 # rules
 compile: ./bin ${OBJ} ${SRC}
-	ar rcs ${APP} bin/*.o
+	${AR} rcs ${APP} bin/*.o
 
 ./bin:
 	mkdir -p bin
@@ -34,8 +44,9 @@ clean:
 
 install:
 	cp ${APP} /usr/lib/
-	mkdir -p /usr/include/libytui
-	cp src/*.hh /usr/include/libytui/
+	mkdir -p libytui
+	cp src/*.hh libytui/
+	cp -r libytui /usr/include/
 
 all:
 	@echo compile

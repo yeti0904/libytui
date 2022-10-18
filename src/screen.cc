@@ -10,7 +10,9 @@ YTUI::Screen::Screen() {
 	buf.Resize(YTUI::Terminal::GetSize());
 	old.Resize(buf.Size());
 
-	YTUI::SignalHandlers::Init();
+	#ifndef LIBYTUI_PLATFORM_WINDOWS
+		YTUI::SignalHandlers::Init();
+	#endif
 }
 
 YTUI::Screen::~Screen() {
@@ -93,4 +95,8 @@ void YTUI::Screen::Render() {
 
 	// blit current buffer to old buffer
 	old.BlitBuffer(buf, {0, 0});
+}
+
+void YTUI::Screen::UpdateBufferSize() {
+	buf.Resize(YTUI::Terminal::GetSize());
 }

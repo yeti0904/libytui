@@ -18,6 +18,13 @@ int main(void) {
 		switch (key) {
 			case ' ': {
 				canvas.MoveCursor(cursorPos);
+				canvas.SetColourBG(YTUI::Colours::Black);
+				canvas.PrintChar(' ');
+				break;
+			}
+			case '\n': {
+				canvas.MoveCursor(cursorPos);
+				canvas.SetColourBG(YTUI::Colours::White);
 				canvas.PrintChar(' ');
 				break;
 			}

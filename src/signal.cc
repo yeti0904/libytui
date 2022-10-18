@@ -2,6 +2,8 @@
 #include "_components.hh"
 #include "terminal.hh"
 
+#ifndef LIBYTUI_PLATFORM_WINDOWS
+
 void YTUI::SignalHandlers::Init() {
 	{ // Control C
 		struct sigaction handler;
@@ -43,3 +45,5 @@ void YTUI::Signal::ExitOnControlC(bool exit) {
 		exit? YTUI::SignalHandlers::ControlC : YTUI::SignalHandlers::Nothing
 	);
 }
+
+#endif

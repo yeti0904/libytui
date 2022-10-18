@@ -46,6 +46,21 @@ YTUI::Buffer::Buffer() {
 	options.wrapText = false;
 }
 
+YTUI::Buffer::Buffer(std::vector <std::vector <char>> from) {
+	if (from.empty()) {
+		throw std::runtime_error("initialised buffer from an empty vector");
+	}
+	for (auto& line : from) {
+		if (line.size() != from[0].size()) {
+			throw std::runtime_error("not all lines are of an equal size");
+		}
+		buf.push_back({});
+		for (auto& col : line) {
+			buf.back().push_back(YTUI::Character(col, attr));
+		}
+	}
+}
+
 void YTUI::Buffer::Resize(const YTUI::Vec2& size) {
 	buf.resize(size.y);
 	for (auto& line : buf) {

@@ -1,34 +1,80 @@
 #include "terminal.hh"
 
 void YTUI::Terminal::MoveCursor(const YTUI::Vec2& pos) {
-	printf("\x1b[%i;%if", (int) pos.y, (int) pos.x);
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		COORD winpos = {(short) pos.x, (short) pos.y};
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), winpos);
+	#else
+		printf("\x1b[%i;%if", (int) pos.y, (int) pos.x);
+	#endif
 }
 
 void YTUI::Terminal::Clear() {
-	fputs("\x1b[2J", stdout);
-	YTUI::Terminal::MoveCursor({1, 1});
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		HANDLE                     handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_SCREEN_BUFFER_INFO screen;
+		DWORD                      written;
+
+		GetConsoleScreenBufferInfo(handle, &screen);
+		FillConsoleOutputCharacterA(
+			handle, ' ', screen.dwSize.X * screen.dwSize.Y, {0, 0}, &written
+		);
+	    FillConsoleOutputAttribute(
+	        handle, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+	        screen.dwSize.X * screen.dwSize.Y, {0, 0}, &written
+	    );
+	#else
+		fputs("\x1b[2J", stdout);
+		YTUI::Terminal::MoveCursor({1, 1});
+	#endif
 }
 
 YTUI::Vec2 YTUI::Terminal::GetSize() {
-	struct winsize size;
-	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == -1) {
-		throw std::runtime_error(strerror(errno));
-	}
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		CONSOLE_SCREEN_BUFFER_INFO screen;
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &screen);
 
-	return {size.ws_col, size.ws_row};
+		return {
+			(size_t) (screen.srWindow.Right - screen.srWindow.Left + 1),
+			(size_t) (screen.srWindow.Bottom - screen.srWindow.Top + 1)
+		};
+	#else
+		struct winsize size;
+		if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == -1) {
+			throw std::runtime_error(strerror(errno));
+		}
+	
+		return {size.ws_col, size.ws_row};
+	#endif
 }
 
 void YTUI::Terminal::SetCursorVisibility(bool visible) {
-	fputs("\x1b[?25", stdout);
-	putchar(visible? 'h' : 'l');
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		HANDLE              handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_CURSOR_INFO cursor;
+		GetConsoleCursorInfo(handle, &cursor);
+
+		cursor.bVisible = visible? TRUE : FALSE;
+
+		SetConsoleCursorInfo(handle, &cursor);
+	#else
+		fputs("\x1b[?25", stdout);
+		putchar(visible? 'h' : 'l');
+	#endif
 }
 
 void YTUI::Terminal::UseAlternativeBuffer(bool use) {
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		return;
+	#endif
 	fputs("\x1b[?1049", stdout);
 	putchar(use? 'h' : 'l');
 }
 
 void YTUI::Terminal::SetColour(uint8_t colour, bool onBackground) {
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		return;
+	#endif
 	printf("\x1b[%im", colour + (onBackground? 10 : 0));
 }
 
@@ -93,14 +139,29 @@ void YTUI::Terminal::ResetAttributes() {
 }
 
 void YTUI::Terminal::SetEcho(bool on) {
-	struct termios term;
-	tcgetattr(STDIN_FILENO, &term);
+	#ifdef LIBYTUI_PLATFORM_WINDOWS
+		HANDLE handle = GetStdHandle(STD_INPUT_HANDLE);
+		DWORD  mode   = 0;
+		GetConsoleMode(handle, &mode);
 
-	if (on) {
-		term.c_lflag |= ECHO;
-	}
-	else {
-		term.c_lflag &= ~ECHO;
-	}
-	tcsetattr(STDIN_FILENO, 0, &term);
+		if (on) {
+			mode |= ENABLE_ECHO_INPUT;
+		}
+		else {
+			mode &= ~ENABLE_ECHO_INPUT;
+		}
+
+		SetConsoleMode(handle, mode);
+	#else
+		struct termios term;
+		tcgetattr(STDIN_FILENO, &term);
+	
+		if (on) {
+			term.c_lflag |= ECHO;
+		}
+		else {
+			term.c_lflag &= ~ECHO;
+		}
+		tcsetattr(STDIN_FILENO, 0, &term);
+	#endif
 }

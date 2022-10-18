@@ -14,6 +14,7 @@ namespace YTUI {
 			Screen();
 			~Screen();
 			void Render();
+			void UpdateBufferSize();
 	};
 }
 

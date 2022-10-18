@@ -1,6 +1,8 @@
 #ifndef LIBYTUI_SIGNAL_HH
 #define LIBYTUI_SIGNAL_HH
 
+#ifndef LIBYTUI_PLATFORM_WINDOWS
+
 namespace YTUI {
 	namespace SignalHandlers {
 		void Init();
@@ -12,5 +14,7 @@ namespace YTUI {
 		void ExitOnControlC(bool exit);
 	}
 }
+
+#endif
 
 #endif

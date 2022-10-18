@@ -89,6 +89,7 @@ namespace YTUI {
 			Attribute     attr;
 			
 			Buffer();
+			Buffer(std::vector <std::vector <char>> from);
 			void             Resize(const YTUI::Vec2& size);
 			YTUI::Vec2       Size();
 			YTUI::Character& GetCharacter(const YTUI::Vec2& pos);
